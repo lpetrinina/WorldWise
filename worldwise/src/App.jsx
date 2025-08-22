@@ -7,6 +7,7 @@ import Product from "./pages/Product";
 import Login from "./pages/Login";
 import AppLayout from "./pages/AppLayout";
 import CityList from "./components/city/CityList";
+import CountryList from "./components/country/CountryList";
 
 const BASE_URL = "http://localhost:9000";
 
@@ -54,6 +55,15 @@ function App() {
             path='cities'
             element={
               <CityList
+                cities={cities}
+                isLoading={isLoading}
+              />
+            }
+          />
+          <Route
+            path='countries'
+            element={
+              <CountryList
                 cities={cities}
                 isLoading={isLoading}
               />
