@@ -8,6 +8,8 @@ import Button from "../common/button/Button";
 import BackButton from "../common/button/BackButton";
 import Message from "../common/message/Message";
 import Spinner from "../common/spinner/Spinner";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
@@ -31,6 +33,10 @@ function Form() {
   const [geocodingError, setGeocodingError] = useState("");
 
   useEffect(() => {
+    if (!lat && !lng) {
+      return;
+    }
+
     async function fetchCityData() {
       try {
         setIsLoadingGeocoding(true);
@@ -63,12 +69,16 @@ function Form() {
     return <Spinner />;
   }
 
+  if (!lat && !lng) {
+    return <Message message={"Start by clicking somewhere on the map!"} />;
+  }
+
   if (geocodingError) {
     return <Message message={geocodingError} />;
   }
 
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.row}>
         <label htmlFor='cityName'>City name</label>
         <input
@@ -81,10 +91,12 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor='date'>When did you go to {cityName}?</label>
-        <input
+
+        <DatePicker
           id='date'
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
+          onChange={(date) => setDate(date)}
+          selected={date}
+          dateFormat='dd/MM/yyyy'
         />
       </div>
 
